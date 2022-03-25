@@ -1,0 +1,11 @@
+package util;
+
+var ACCELERATION_AMT = 640;
+var GRAVITY = 600;
+var DRAG = 400;
+var JUMP_FORCE = 320;
+var CLOUD_MULTIPLIER = 1.5;
+var POWERUP_MULTIPLIER = 1.25;
+var MAX_SPEED = 128;
+var MAX_FALL = 600;
+var PLATFORM_MOVE_SPEEDS = [40, 60, 80];
