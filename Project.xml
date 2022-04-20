@@ -46,5 +46,7 @@
 	<!-- _________________________________ Custom _______________________________ -->
 
 	<icon path='assets/icon.svg' />
+	<template path="assets/index.html" rename="index.html" />
+	<template path="assets/app.html" rename="app.html" />
 
 </project>

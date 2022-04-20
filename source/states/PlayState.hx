@@ -1,5 +1,13 @@
 package states;
 
+import objects.Background.BackGround;
+import zero.utilities.Vec2;
+import particles.CubeParticle;
+import objects.Cube;
+import particles.Puff;
+import particles.Elec;
+import zero.flixel.ec.ParticleEmitter;
+import flixel.FlxSprite;
 import zero.utilities.Timer;
 import objects.Platform;
 import objects.Player;
@@ -14,20 +22,31 @@ class PlayState extends State
 		instance = this;
 	}
 
-	var player:Player;
+	public var player:Player;
 	var platforms:PlatformManager;
 
+	public var elecs = new ParticleEmitter(() -> new Elec());
+	public var puffs = new ParticleEmitter(() -> new Puff());
+	public var powerups = new ParticleEmitter(() -> new Cube());
+	public var cube_particles = new ParticleEmitter(() -> new CubeParticle());
+
 	override function create() {
-		bgColor = 0xFFE0F0FF;
-		add(player = new Player(FlxG.width/2, FlxG.height - 64));
+		bgColor = 0xFFdbf0f7;
+		add(new BackGround());
+		add(cube_particles);
+		add(player = new Player(FlxG.width/2, FlxG.height - 64, 3.get_random().floor(), Math.random() > 0.5, Math.random() > 0.5, Math.random() > 0.5));
+		add(puffs);
 		add(platforms = new PlatformManager());
+		add(powerups);
+		add(elecs);
 		FlxG.camera.pixelPerfectRender = true;
 	}
 
 	override function update(e:Float) {
 		super.update(e);
 		FlxG.collide(platforms, player, collide_platform);
-		FlxG.camera.setScrollBoundsRect(0, FlxG.camera.scroll.y, FlxG.width, FlxG.height, true);
+		FlxG.overlap(powerups, player, get_powerup);
+		FlxG.camera.setScrollBoundsRect(0, FlxG.camera.scroll.y, FlxG.width, FlxG.height + 32, true);
 	}
 
 	function collide_platform(p:Platform, o:Player) {
@@ -35,19 +54,45 @@ class PlayState extends State
 			case NORMAL:
 				o.jump();
 			case GROUND:
-				if (o.state == NORMAL) o.jump();
+				if (o.state == NORMAL) o.jump(GROUND_MULTIPLIER);
 			case CLOUD:
 				if (p.available) {
+					p.animation.play('play');
 					p.available = false;
-					p.acceleration.y = 100;
+					p.acceleration.y = -CLOUD_DEPRESS_SPEED * 2;
+					p.velocity.y = o.velocity.y = CLOUD_DEPRESS_SPEED;
+					puffs.fire({ position: p.getMidpoint(), velocity: FlxPoint.get(-100, 0) });
+					puffs.fire({ position: p.getMidpoint(), velocity: FlxPoint.get(100, 0) });
 					Timer.get(0.5, () -> {
 						o.jump(CLOUD_MULTIPLIER);
+						for (i in 0...8) {
+							puffs.fire({
+								position: p.getMidpoint().add(12.get_random(-12)),
+								velocity: FlxPoint.get(0, -240.get_random(100)),
+								data: { frame: 6.get_random().floor() }
+							});
+						}
 						p.kill();
 					});
 				}
 			case HAZARD:
 				o.state = DEAD;
+				o.electric = true;
 		}
+	}
+
+	function get_powerup(powerup:Cube, player:Player) {
+		player.powerup_timer = POWERUP_TIME;
+		for (i in 0...6) {
+			var v = Vec2.get(150, 0);
+			v.angle = i * 360/6;
+			cube_particles.fire({
+				position: powerup.getMidpoint(),
+				velocity: FlxPoint.get(v.x, v.y),
+			});
+			v.put();
+		}
+		powerup.kill();
 	}
 
 }

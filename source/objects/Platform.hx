@@ -45,7 +45,7 @@ class NormalPlatform extends Platform {
 	public function new() {
 		super();
 		type = NORMAL;
-		makeGraphic(26, 5, 0xFF0080FF);
+		loadGraphic(Images.platform__png);
 	}
 }
 
@@ -53,16 +53,37 @@ class HazardPlatform extends Platform {
 	public function new() {
 		super();
 		type = HAZARD;
-		makeGraphic(26, 5, 0xFFFF004D);
+		loadGraphic(Images.shocker_plain__png);
+		trace(Images.shocker_plain__png);
+		//animation.add('play', [0,1], 15);
+		//animation.play('play');
+		//this.make_and_center_hitbox(26, 5);
+	}
+	var elec_timer:Float = 0;
+	override function update(elapsed:Float) {
+		super.update(elapsed);
+		if ((elec_timer -= elapsed) <= 0) {
+			elec_timer = ELECTRICITY_TIME;
+			PLAYSTATE.elecs.fire({ position: FlxPoint.get(x + width.get_random(), y + height.get_random()) });
+		}
 	}
 }
 
 class CloudPlatform extends Platform {
+	static var i = 0;
 	public function new() {
 		super();
 		type = CLOUD;
-		makeGraphic(26, 16, 0xFF808080);
+		loadGraphic(i % 3 == 0 ? Images.cloud2__png : Images.cloud1__png, true, 28, 18);
+		animation.add('play', [1,2,2,3], 24, false);
+		animation.add('idle', [0]);
 		this.make_anchored_hitbox(26, 5);
+		i++;
+	}
+
+	override function spawn(x:Float, y:Float, moving:Bool) {
+		super.spawn(x, y, moving);
+		animation.play('idle');
 	}
 }
 
@@ -70,7 +91,7 @@ class Ground extends Platform {
 	public function new() {
 		super();
 		type = GROUND;
-		makeGraphic(FlxG.width, 11, 0xFFFF004D);
+		makeGraphic(FlxG.width, 11, 0x00FF004D);
 		reset(0, FlxG.height - 11);
 	}
 }
@@ -79,7 +100,7 @@ class PlatformManager extends FlxTypedGroup<Platform> {
 	
 	var top:Platform;
 	var gap:Float = 32;
-	var y:Float = FlxG.height - 64;
+	var y:Float = FlxG.height - 112;
 
 	var spawn_types:Array<PlatformSpawn> = [
 		NORMAL,
@@ -158,7 +179,8 @@ class PlatformManager extends FlxTypedGroup<Platform> {
 				case NORMAL_POWERUP:
 					var platform = get(NORMAL);
 					platform.spawn((FlxG.width - platform.width).get_random(0), y, false);
-					top = platform;		
+					top = platform;
+					PLAYSTATE.powerups.fire({ position: FlxPoint.get(platform.x + platform.width/2 - 6, platform.y - 24) });
 				case CLOUD:
 					var platform = get(CLOUD);
 					platform.spawn((FlxG.width - platform.width).get_random(0), y, false);

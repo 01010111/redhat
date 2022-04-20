@@ -7,11 +7,17 @@ class Controller {
 	public static var any(get, never):Bool;
 
 	static function get_left() {
-		return FlxG.keys.pressed.LEFT;
-	}
-
-	static function get_right() {
-		return FlxG.keys.pressed.RIGHT;
+		return 
+			FlxG.keys.pressed.LEFT || 
+			PLAYER != null && FlxG.mouse.pressed && FlxG.mouse.x < PLAYER.getMidpoint().x - 8;
+			//FlxG.mouse.pressed && FlxG.mouse.x < FlxG.width/2;
+		}
+		
+		static function get_right() {
+			return 
+			FlxG.keys.pressed.RIGHT ||
+			PLAYER != null && FlxG.mouse.pressed && FlxG.mouse.x > PLAYER.getMidpoint().x + 8;
+			//FlxG.mouse.pressed && FlxG.mouse.x > FlxG.width/2;
 	}
 
 	static function get_any() {

@@ -1,5 +1,6 @@
 // Statics
 import states.PlayState.instance as PLAYSTATE;
+import objects.Player.instance as PLAYER;
 import util.Constants;
 
 // Utilities

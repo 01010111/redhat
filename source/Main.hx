@@ -32,6 +32,6 @@ class Main extends Sprite
 		FlxG.game.stage.quality = StageQuality.LOW;
 		FlxG.resizeWindow(FlxG.stage.stageWidth, FlxG.stage.stageHeight);
 		#end
-		FlxG.mouse.visible = false;
+		FlxG.mouse.useSystemCursor = true;
 	}
 }
