@@ -5,7 +5,6 @@ import zero.utilities.Tween;
 import zero.utilities.Timer;
 import flixel.group.FlxGroup;
 import ui.Button;
-import flixel.addons.ui.FlxButtonPlus;
 import flixel.FlxSprite;
 import zero.flixel.states.State;
 
@@ -27,14 +26,16 @@ class TitleScreen extends State {
 		background = new FlxSprite(0,0,Images.title_background__png);
 		clouds = new FlxTypedGroup();
 		title_graphic = new FlxSprite(0,0,Images.title_level_up_logo__png);
-		play_button = new ui.Button(FlxG.width/2 - 26,FlxG.height/2+16,Images.title_start_button__png);
+		play_button = new ui.Button(FlxG.width/2 - 26,FlxG.height/2+16);
+		play_button.loadGraphic(Images.title_start_button__png, true, 53, 17);
+		play_button.animation.add('flicker', [0,1,0,1,0], 15, false);
 		redhat_logo = new FlxSprite(0,0,Images.title_red_hat_logo__png);
 
 		make_clouds();
 
 		background.scrollFactor.set(0,0.5);
 
-		play_button.on_hover = () -> play_button.flicker(0.25, 0.05);
+		play_button.on_hover = () -> play_button.animation.play('flicker');
 		play_button.on_click = () -> next();
 
 		add(background);
@@ -83,8 +84,10 @@ class TitleScreen extends State {
 		//add(instructions);
 
 		Timer.get(1, () -> {
-			confirm_button = new ui.Button(FlxG.width/2 - 33,FlxG.height/2+16,Images.instructions_got_it_button__png);
-			confirm_button.on_hover = () -> confirm_button.flicker(0.25, 0.05);
+			confirm_button = new ui.Button(FlxG.width/2 - 33,FlxG.height/2+16);
+			confirm_button.loadGraphic(Images.instructions_got_it_button__png, true, 66, 17);
+			confirm_button.animation.add('flicker', [0,1,0,1,0], 15, false);
+			confirm_button.on_hover = () -> confirm_button.animation.play('flicker');
 			confirm_button.on_click = () -> go_to_next();
 			add(confirm_button);
 		});

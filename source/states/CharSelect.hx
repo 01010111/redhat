@@ -69,9 +69,11 @@ class CharSelect extends State {
 		bottom_bar.makeGraphic(FlxG.width, 37, 0xFFaedcdd);
 		add(bottom_bar);
 
-		confirm_btn = new Button(0, FlxG.height - 27, Images.player_confirm_button__png);
+		confirm_btn = new Button(0, FlxG.height - 27);
+		confirm_btn.loadGraphic(Images.player_confirm_button__png, true, 72, 17);
+		confirm_btn.animation.add('flicker', [0,1,0,1,0], 15, false);
 		confirm_btn.screenCenter(flixel.util.FlxAxes.X);
-		confirm_btn.on_hover = () -> confirm_btn.flicker(0.25, 0.05);
+		confirm_btn.on_hover = () -> confirm_btn.animation.play('flicker');
 		confirm_btn.on_click = () -> outfit_select();
 		add(confirm_btn);
 	}
@@ -110,9 +112,11 @@ class CharSelect extends State {
 				}
 			}
 
-			jump_btn = new Button(0, FlxG.height - 27, Images.product_jump_in_button__png);
+			jump_btn = new Button(0, FlxG.height - 27);
+			jump_btn.loadGraphic(Images.product_jump_in_button__png, true, 72, 17);
+			jump_btn.animation.add('flicker', [0,1,0,1,0], 15, false);
 			jump_btn.screenCenter(flixel.util.FlxAxes.X);
-			jump_btn.on_hover = () -> jump_btn.flicker(0.25, 0.05);
+			jump_btn.on_hover = () -> jump_btn.animation.play('flicker');
 			jump_btn.on_click = () -> go_to_game();
 			add(jump_btn);
 		});
