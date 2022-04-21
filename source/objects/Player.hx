@@ -1,5 +1,6 @@
 package objects;
 
+import zero.utilities.Tween;
 import zero.utilities.Vec2;
 import zero.utilities.Timer;
 import flixel.FlxObject;
@@ -20,7 +21,7 @@ class Player extends FlxSprite {
 		var variant = 0;
 		if (hat) variant += 3;
 		if (shirt) variant += 6;
-		if (shirt) variant += 12;
+		if (pants) variant += 12;
 		variant += player * 24;
 		trace(player, hat, shirt, pants, variant);
 		acceleration.y = 600;
@@ -122,7 +123,15 @@ class Player extends FlxSprite {
 			case IDLE:
 			case NORMAL:
 			case DEAD: 
-				Timer.get(2, () -> FlxG.resetState());
+				Timer.get(2, () -> {
+					var slide = new FlxSprite(0, FlxG.height);
+					slide.scrollFactor.set();
+					slide.makeGraphic(FlxG.width, FlxG.height, 0xffee0000);
+					FlxG.state.add(slide);
+					Tween.tween(slide, 0.2, { y: 0 }, { on_complete: () -> {
+						Timer.get(0.25, () -> FlxG.resetState());
+					}});
+				});
 				loadGraphic(Images.playershocked__png, true, 21, 37);
 				this.make_anchored_hitbox(8, 32);
 				animation.add('shock', [1,2,0,1,0], 15);

@@ -1,5 +1,6 @@
 package states;
 
+import zero.utilities.Tween;
 import zero.flixel.ui.BitmapText;
 import objects.Background.BackGround;
 import zero.utilities.Vec2;
@@ -36,10 +37,9 @@ class PlayState extends State
 
 	override function create() {
 		bgColor = 0xFFdbf0f7;
-		FlxG.camera.flash(0xFFdbf0f7, 0.2);
 		add(new BackGround());
 		add(cube_particles);
-		add(player = new Player(FlxG.width/2, FlxG.height - 43, 3.get_random().floor(), Math.random() > 0.5, Math.random() > 0.5, Math.random() > 0.5));
+		add(player = new Player(FlxG.width/2, FlxG.height - 43, util.GameState.player, util.GameState.hat, util.GameState.shirt, util.GameState.pants));
 		add(puffs);
 		add(platforms = new PlatformManager());
 		add(powerups);
@@ -57,6 +57,10 @@ class PlayState extends State
 		}));
 		score_text.color = 0xFFEE0000;
 		score_text.text = '0';
+		var slide = new FlxSprite(0, 0);
+		slide.makeGraphic(FlxG.width, FlxG.height, 0xffee0000);
+		add(slide);
+		Tween.tween(slide, 0.2, { y: -FlxG.height }, { on_complete: () -> slide.kill() });
 	}
 
 	override function update(e:Float) {

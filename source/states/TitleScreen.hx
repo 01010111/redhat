@@ -80,7 +80,7 @@ class TitleScreen extends State {
 		var instructions = new FlxSprite(0,0,Images.instructions_text__png);
 		instructions.scale.set(0.75, 0.75);
 		instructions.screenCenter();
-		add(instructions);
+		//add(instructions);
 
 		Timer.get(1, () -> {
 			confirm_button = new ui.Button(FlxG.width/2 - 33,FlxG.height/2+16,Images.instructions_got_it_button__png);
@@ -94,9 +94,9 @@ class TitleScreen extends State {
 		confirm_button.flicker(0.25, 0.05, false, true, (_) -> confirm_button.kill());
 		confirm_button.interactive = false;
 		Tween.tween(camera.scroll, 1.5, { y: -FlxG.height*1.25 }, { ease: Ease.sineIn, on_complete: () -> {
-			FlxG.switchState(new PlayState());
+			FlxG.switchState(new CharSelect());
 		}});
-		Timer.get(1, () -> FlxG.camera.fade(0xFFdbf0f7, 0.5));
+		Timer.get(1, () -> FlxG.camera.fade(0xFFe4f3f4, 0.5));
 	}
 
 	override function update(dt:Float) {
