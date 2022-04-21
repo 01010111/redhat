@@ -1,0 +1,35 @@
+package ui;
+
+import zero.utilities.Vec2;
+import zero.utilities.Rect;
+import flixel.FlxSprite;
+
+class Button extends FlxSprite {
+
+	public var interactive:Bool = true;
+
+	public var on_hover:Void -> Void;
+	public var on_out:Void -> Void;
+	public var on_click:Void -> Void;
+
+	var hovered(default, set):Bool = false;
+
+	override function update(elapsed:Float) {
+		super.update(elapsed);
+		if (!interactive) return;
+		var r = Rect.get(x, y, width, height);
+		var mp = Vec2.get(FlxG.mouse.x, FlxG.mouse.y);
+		hovered = r.contains_point(mp);
+		r.put();
+		mp.put();
+		if (hovered && FlxG.mouse.justPressed && on_click != null) on_click(); 
+	}
+
+	function set_hovered(v:Bool) {
+		if (hovered == v) return hovered;
+		if (v && on_hover != null) on_hover();
+		if (!v && on_out != null) on_out();
+		return hovered = v;
+	}
+
+}

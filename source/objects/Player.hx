@@ -122,7 +122,7 @@ class Player extends FlxSprite {
 			case IDLE:
 			case NORMAL:
 			case DEAD: 
-				Timer.get(1, () -> FlxG.resetState());
+				Timer.get(2, () -> FlxG.resetState());
 				loadGraphic(Images.playershocked__png, true, 21, 37);
 				this.make_anchored_hitbox(8, 32);
 				animation.add('shock', [1,2,0,1,0], 15);

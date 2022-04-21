@@ -1,5 +1,6 @@
 package;
 
+import states.*;
 import zero.utilities.Tween;
 import openfl.display.Sprite;
 import flixel.FlxGame;
@@ -22,15 +23,15 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
-		addChild(new FlxGame(WIDTH, HEIGHT, states.PlayState, 1, 60, 60, true));
+		addChild(new FlxGame(WIDTH, HEIGHT, TitleScreen, 1, 60, 60, true));
 		((?dt:Dynamic) -> {
 			Timer.update(dt);
 			Tween.update(dt);
 		}).listen('preupdate');
 		#if PIXEL_PERFECT
-		FlxG.game.setFilters([new ShaderFilter(new FlxShader())]);
-		FlxG.game.stage.quality = StageQuality.LOW;
-		FlxG.resizeWindow(FlxG.stage.stageWidth, FlxG.stage.stageHeight);
+		//FlxG.game.setFilters([new ShaderFilter(new FlxShader())]);
+		//FlxG.game.stage.quality = StageQuality.LOW;
+		//FlxG.resizeWindow(FlxG.stage.stageWidth, FlxG.stage.stageHeight);
 		#end
 		FlxG.mouse.useSystemCursor = true;
 	}

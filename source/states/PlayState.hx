@@ -1,5 +1,6 @@
 package states;
 
+import zero.flixel.ui.BitmapText;
 import objects.Background.BackGround;
 import zero.utilities.Vec2;
 import particles.CubeParticle;
@@ -30,16 +31,32 @@ class PlayState extends State
 	public var powerups = new ParticleEmitter(() -> new Cube());
 	public var cube_particles = new ParticleEmitter(() -> new CubeParticle());
 
+	var score_text:BitmapText;
+	var score(default, set) = 0;
+
 	override function create() {
 		bgColor = 0xFFdbf0f7;
+		FlxG.camera.flash(0xFFdbf0f7, 0.2);
 		add(new BackGround());
 		add(cube_particles);
-		add(player = new Player(FlxG.width/2, FlxG.height - 64, 3.get_random().floor(), Math.random() > 0.5, Math.random() > 0.5, Math.random() > 0.5));
+		add(player = new Player(FlxG.width/2, FlxG.height - 43, 3.get_random().floor(), Math.random() > 0.5, Math.random() > 0.5, Math.random() > 0.5));
 		add(puffs);
 		add(platforms = new PlatformManager());
 		add(powerups);
 		add(elecs);
 		FlxG.camera.pixelPerfectRender = true;
+		add(score_text = new BitmapText({
+			position: FlxPoint.get(0, 16),
+			align: CENTER,
+			width: FlxG.width,
+			graphic: Images.alphabet__png,
+			letter_size: FlxPoint.get(8, 8),
+			charset: ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
+			scroll_factor: FlxPoint.get(0,0),
+			letter_spacing: -1,
+		}));
+		score_text.color = 0xFFEE0000;
+		score_text.text = '0';
 	}
 
 	override function update(e:Float) {
@@ -47,6 +64,7 @@ class PlayState extends State
 		FlxG.collide(platforms, player, collide_platform);
 		FlxG.overlap(powerups, player, get_powerup);
 		FlxG.camera.setScrollBoundsRect(0, FlxG.camera.scroll.y, FlxG.width, FlxG.height + 32, true);
+		score = player.y.map(FlxG.height - 43, FlxG.height - 43 - 16, 0, 1).floor();
 	}
 
 	function collide_platform(p:Platform, o:Player) {
@@ -93,6 +111,12 @@ class PlayState extends State
 			v.put();
 		}
 		powerup.kill();
+	}
+
+	function set_score(v:Int) {
+		if (v <= score) return score;
+		score_text.text = '$v';
+		return score = v;
 	}
 
 }
