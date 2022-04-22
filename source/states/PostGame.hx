@@ -47,9 +47,8 @@ class PostGame extends FlxSubState {
 					case 2:main_menu;
 					default:() -> {}
 				}
-				if (new_hi) Timer.get(i * 0.2, () -> Tween.tween(btn, 0.25, { y: FlxG.height/2 + 32 + i * 20 }, { ease: Ease.sineOut }));
+				Timer.get(i * 0.2, () -> Tween.tween(btn, 0.25, { y: FlxG.height/2 + 32 + i * 20 }, { ease: Ease.sineOut }));
 				add(btn);
-				if (i == 0) btn.verbose = true;
 				btns.push(btn);
 			}
 
@@ -76,7 +75,7 @@ class PostGame extends FlxSubState {
 			big_score.text = '$score';
 			if (new_hi) big_score.text += '*';
 			big_score.color = 0xFFEE0000;
-			Timer.get(0.1, () -> big_score.color = big_score.color == 0xFFFFFFFF ? 0xFFEE0000 : 0xFFFFFFFF, 16);
+			if (new_hi) Timer.get(0.1, () -> big_score.color = big_score.color == 0xFFFFFFFF ? 0xFFEE0000 : 0xFFFFFFFF, 16);
 			add(big_score);
 
 			var hi_text = new BitmapText({
