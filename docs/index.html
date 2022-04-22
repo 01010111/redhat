@@ -1,0 +1,45 @@
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel="stylesheet" href="style.css">
+	<style>
+		iframe {
+			width: 288px;
+			height: 512px;
+			position: absolute;
+			top: calc(50vh - 256px);
+			left: calc(50vw - 144px);
+		}
+	</style>
+</head>
+<body style="background-color: black;">
+	<iframe id="game-container" src="app.html" frameborder="0"></iframe>
+	<script>
+		function resize() {
+			let w = window.innerWidth;
+			let h = window.innerHeight;
+			let gw = 288;
+			let gh = 512;
+			let s = 0;
+			if (w > 480) {
+				console.log(gw * s < w, gh * s < h);
+				while (gw * s < w && gh * s < h) s += 0.5;
+				s -= 0.5;
+				console.log(w, h, s);
+				let game_container = document.getElementById('game-container');
+				game_container.style.transform = `scale(${s})`;
+			}
+			else {
+				s = Math.min(w/gw,h/gh);
+				let game_container = document.getElementById('game-container');
+				game_container.style.transform = `scale(${s})`;
+			}
+		}
+		window.onresize = resize;
+		resize();
+	</script>
+</body>
+</html>
