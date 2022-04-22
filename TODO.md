@@ -1,8 +1,34 @@
-- [ ] implement pointer controls
-- [ ] implement better anykey
+Today
+- [x] fix font
+- [x] buttons
+- [x] intructions after build
+- [x] postgame
+  - [x] cur score
+  - [x] high score
+  - [x] play again
+  - [x] leaderboard
+  - [x] main menu
+- [x] leaderboard
+  - [x] top 10
+  - [x] initials
+  - [x] character
+  - [x] score
+  - [x] post my score
+  - [x] main menu
+- [x] full screen on mobile
 
-regular platforms
-breaking platforms
-cubes powerups give timed big jump powerup
-clouds spring you higher than regular blocks
+Early next week
+- [ ] Sound effects
+- [ ] Music
+- [ ] Saving data
+  - [ ] Hi score
+  - [ ] player/outfit
+  - [ ] has played
+  - [ ] initials
+- [x] skip instructions after first play
 
+Later
+- [ ] Support big numbers (eg 1500k instead of 1500000)
+- [ ] Replace leaderboard placeholder
+  - [ ] Leaderboard backend
+  - [ ] Initials screen

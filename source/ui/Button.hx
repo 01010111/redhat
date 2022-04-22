@@ -12,13 +12,18 @@ class Button extends FlxSprite {
 	public var on_out:Void -> Void;
 	public var on_click:Void -> Void;
 
+	public var verbose = false;
+
 	var hovered(default, set):Bool = false;
 
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 		if (!interactive) return;
-		var r = Rect.get(x, y, width, height);
-		var mp = Vec2.get(FlxG.mouse.x, FlxG.mouse.y);
+		var sp = getScreenPosition();
+		var r = Rect.get(sp.x, sp.y, width, height);
+		sp.put();
+		var mp = Vec2.get(FlxG.mouse.screenX, FlxG.mouse.screenY);
+		if (verbose) trace(r, mp, r.contains_point(mp));
 		hovered = r.contains_point(mp);
 		r.put();
 		mp.put();

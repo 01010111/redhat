@@ -1,5 +1,6 @@
 package states;
 
+import ui.Transition;
 import zero.utilities.Timer;
 import zero.utilities.Tween;
 import flixel.util.FlxAxes;
@@ -93,7 +94,7 @@ class CharSelect extends State {
 			add(do_you_own);
 
 			for (i in 0...3) {
-				var product_bar = new Button(11, 162 + i * 18);
+				var product_bar = new Button(11, 162 + i * 17);
 				product_bar.loadGraphic(Images.product_bar__png, true, 122, 16);
 				add(product_bar);
 				product_bar.on_click = () -> {
@@ -112,6 +113,9 @@ class CharSelect extends State {
 				}
 			}
 
+			var product_type = new FlxSprite(28, 164, Images.products_type__png);
+			add(product_type);
+
 			jump_btn = new Button(0, FlxG.height - 27);
 			jump_btn.loadGraphic(Images.product_jump_in_button__png, true, 72, 17);
 			jump_btn.animation.add('flicker', [0,1,0,1,0], 15, false);
@@ -124,12 +128,7 @@ class CharSelect extends State {
 
 	function go_to_game() {
 		jump_btn.interactive = false;
-		var slide = new FlxSprite(0, FlxG.height);
-		slide.makeGraphic(FlxG.width, FlxG.height, 0xffee0000);
-		add(slide);
-		Tween.tween(slide, 0.2, { y: 0 }, { on_complete: () -> {
-			Timer.get(0.25, () -> FlxG.switchState(new PlayState()));
-		}});
+		new Transition(this, OUT, () -> Timer.get(0.25, () -> FlxG.switchState(util.GameState.tut ? new PlayState() : new states.Instructions())));
 	}
 
 }

@@ -7,11 +7,11 @@
 	<link rel="stylesheet" href="style.css">
 	<style>
 		iframe {
-			width: 144px;
-			height: 256px;
+			width: 288px;
+			height: 512px;
 			position: absolute;
-			top: calc(50vh - 128px);
-			left: calc(50vw - 72px);
+			top: calc(50vh - 256px);
+			left: calc(50vw - 144px);
 		}
 	</style>
 </head>
@@ -21,15 +21,22 @@
 		function resize() {
 			let w = window.innerWidth;
 			let h = window.innerHeight;
-			let gw = 144;
-			let gh = 256;
-			let s = 2;
-			console.log(gw * s < w, gh * s < h);
-			while (gw * s < w && gh * s < h) s++;
-			s -= 1;
-			console.log(w, h, s);
-			let game_container = document.getElementById('game-container');
-			game_container.style.transform = `scale(${s})`;
+			let gw = 288;
+			let gh = 512;
+			let s = 0;
+			if (w > 480) {
+				console.log(gw * s < w, gh * s < h);
+				while (gw * s < w && gh * s < h) s += 0.5;
+				s -= 0.5;
+				console.log(w, h, s);
+				let game_container = document.getElementById('game-container');
+				game_container.style.transform = `scale(${s})`;
+			}
+			else {
+				s = Math.min(w/gw,h/gh);
+				let game_container = document.getElementById('game-container');
+				game_container.style.transform = `scale(${s})`;
+			}
 		}
 		window.onresize = resize;
 		resize();

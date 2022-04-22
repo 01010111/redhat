@@ -1,5 +1,6 @@
 package states;
 
+import ui.Transition;
 import zero.utilities.Tween;
 import zero.flixel.ui.BitmapText;
 import objects.Background.BackGround;
@@ -57,10 +58,7 @@ class PlayState extends State
 		}));
 		score_text.color = 0xFFEE0000;
 		score_text.text = '0';
-		var slide = new FlxSprite(0, 0);
-		slide.makeGraphic(FlxG.width, FlxG.height, 0xffee0000);
-		add(slide);
-		Tween.tween(slide, 0.2, { y: -FlxG.height }, { on_complete: () -> slide.kill() });
+		new Transition(this, IN);
 	}
 
 	override function update(e:Float) {
@@ -121,6 +119,11 @@ class PlayState extends State
 		if (v <= score) return score;
 		score_text.text = '$v';
 		return score = v;
+	}
+
+	public function game_over() {
+		score_text.alpha = 0;
+		openSubState(new PostGame(score));
 	}
 
 }

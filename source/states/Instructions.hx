@@ -1,5 +1,6 @@
 package states;
 
+import ui.Transition;
 import flixel.system.FlxAssets;
 import flixel.text.FlxText;
 import zero.utilities.Ease;
@@ -10,7 +11,7 @@ import ui.Button;
 import flixel.FlxSprite;
 import zero.flixel.states.State;
 
-class TitleScreen extends State {
+class Instructions extends State {
 
 	var background:FlxSprite;
 	var clouds:FlxTypedGroup<FlxSprite>;
@@ -23,15 +24,15 @@ class TitleScreen extends State {
 	override function create() {
 		super.create();
 
-		FlxG.camera.flash(0xFFe4f3f4, 0.2);
+		util.GameState.tut = true;
 
 		bgColor = 0xFFaedcdd;
 
 		background = new FlxSprite(0,0,Images.title_background__png);
 		clouds = new FlxTypedGroup();
-		title_graphic = new FlxSprite(0,0,Images.title_level_up_logo__png);
-		play_button = new ui.Button(FlxG.width/2 - 26,FlxG.height/2+24);
-		play_button.loadGraphic(Images.title_start_button__png, true, 53, 17);
+		title_graphic = new FlxSprite(0,-12,Images.instructions_level_up_logo__png);
+		play_button = new ui.Button(FlxG.width/2 - 33,FlxG.height/2+24);
+		play_button.loadGraphic(Images.instructions_got_it_button__png, true, 66, 17);
 		play_button.animation.add('flicker', [0,1,0,1,0], 15, false);
 		redhat_logo = new FlxSprite(0,0,Images.title_red_hat_logo__png);
 
@@ -46,7 +47,15 @@ class TitleScreen extends State {
 		add(clouds);
 		add(title_graphic);
 		add(play_button);
-		add(redhat_logo);
+
+		var instructions = new FlxSprite(0,0,Images.instructions_text__png);
+		//instructions.scale.set(0.5, 0.5);
+		instructions.screenCenter();
+		instructions.x = instructions.x.floor();
+		instructions.y = instructions.y.floor();
+		add(instructions);
+
+		new Transition(this, IN);
 	}
 
 	function make_clouds() {
@@ -77,10 +86,7 @@ class TitleScreen extends State {
 	function go_to_next() {
 		play_button.flicker(0.25, 0.05, false, true, (_) -> play_button.kill());
 		play_button.interactive = false;
-		Tween.tween(camera.scroll, 1.5, { y: -FlxG.height*1.25 }, { ease: Ease.sineIn, on_complete: () -> {
-			FlxG.switchState(new CharSelect());
-		}});
-		Timer.get(1, () -> FlxG.camera.fade(0xFFe4f3f4, 0.5));
+		new Transition(this, OUT, () -> Timer.get(0.25, () -> FlxG.switchState(new states.PlayState())));
 	}
 
 	override function update(dt:Float) {
