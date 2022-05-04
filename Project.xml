@@ -3,13 +3,13 @@
 	<!-- _________________________ Application Settings _________________________ -->
 
 	<app title="redhat" file="redhat" main="Main" version="0.0.1" company="01010111" />
-	<app preloader="flixel.system.FlxPreloader" />
+	<app preloader="util.Preloader" />
 	<set name="SWF_VERSION" value="11.8" />
 
 	<!-- ____________________________ Window Settings ___________________________ -->
 
-	<window fps="60" background="#000000" hardware="true" vsync="false" width="288" height="512" />
-	<window if="html5" resizable="false" />
+	<window fps="60" background="#000000" hardware="true" vsync="false" width="144" height="256" />
+	<window if="html5" resizable="false" background="null" />
 	<window if="desktop" orientation="landscape" fullscreen="false" resizable="false" />
 =	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" />
 
@@ -45,7 +45,6 @@
 
 	<!-- _________________________________ Custom _______________________________ -->
 
-	<icon path='assets/icon.svg' />
 	<template path="assets/index.html" rename="index.html" />
 	<template path="assets/app.html" rename="app.html" />
 

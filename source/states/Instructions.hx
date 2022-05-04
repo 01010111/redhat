@@ -1,5 +1,7 @@
 package states;
 
+import js.Browser;
+import ui.MuteBtn;
 import ui.Transition;
 import flixel.system.FlxAssets;
 import flixel.text.FlxText;
@@ -9,7 +11,7 @@ import zero.utilities.Timer;
 import flixel.group.FlxGroup;
 import ui.Button;
 import flixel.FlxSprite;
-import zero.flixel.states.State;
+
 
 class Instructions extends State {
 
@@ -25,6 +27,7 @@ class Instructions extends State {
 		super.create();
 
 		util.GameState.tut = true;
+		util.GameState.save();
 
 		bgColor = 0xFFaedcdd;
 
@@ -48,12 +51,14 @@ class Instructions extends State {
 		add(title_graphic);
 		add(play_button);
 
-		var instructions = new FlxSprite(0,0,Images.instructions_text__png);
-		//instructions.scale.set(0.5, 0.5);
+		var mobile = js.Browser.navigator.userAgent.contains('Mobile');
+		var instructions = new FlxSprite(0,0,mobile ? Images.instructions_text_mobile__png : Images.instructions_text__png);
 		instructions.screenCenter();
 		instructions.x = instructions.x.floor();
 		instructions.y = instructions.y.floor();
 		add(instructions);
+		
+		add(new MuteBtn());
 
 		new Transition(this, IN);
 	}
@@ -84,6 +89,7 @@ class Instructions extends State {
 	}
 
 	function go_to_next() {
+		Sounds.play(Audio.posi__mp3, 0.5);
 		play_button.flicker(0.25, 0.05, false, true, (_) -> play_button.kill());
 		play_button.interactive = false;
 		new Transition(this, OUT, () -> Timer.get(0.25, () -> FlxG.switchState(new states.PlayState())));

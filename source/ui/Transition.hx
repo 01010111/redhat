@@ -30,7 +30,7 @@ class Transition extends FlxTypedGroup<FlxSprite> {
 			add(spr);
 			Tween.tween(spr, 0.25, { y: endy }, { ease: ease, delay: i * 0.1 });
 		}
-		Timer.get(0.55, on_complete != null ? on_complete : kill);
+		Timer.get(0.75, on_complete != null ? on_complete : kill);
 	}
 
 }

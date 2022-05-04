@@ -23,7 +23,7 @@ class Main extends Sprite
 	public function new()
 	{
 		super();
-		addChild(new FlxGame(WIDTH, HEIGHT, TitleScreen, 2, 60, 60, true));
+		addChild(new FlxGame(WIDTH, HEIGHT, TitleScreen, 1, 60, 60, true));
 		((?dt:Dynamic) -> {
 			Timer.update(dt);
 			Tween.update(dt);

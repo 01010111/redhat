@@ -4,14 +4,13 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Document</title>
-	<link rel="stylesheet" href="style.css">
 	<style>
 		iframe {
-			width: 288px;
-			height: 512px;
+			width: 144px;
+			height: 256px;
 			position: absolute;
-			top: calc(50vh - 256px);
-			left: calc(50vw - 144px);
+			/*top: calc(50vh - 128px);*/
+			left: calc(50vw - 72px);
 		}
 	</style>
 </head>
@@ -19,24 +18,21 @@
 	<iframe id="game-container" src="app.html" frameborder="0"></iframe>
 	<script>
 		function resize() {
-			let w = window.innerWidth;
-			let h = window.innerHeight;
-			let gw = 288;
-			let gh = 512;
-			let s = 0;
-			if (w > 480) {
-				console.log(gw * s < w, gh * s < h);
-				while (gw * s < w && gh * s < h) s += 0.5;
-				s -= 0.5;
-				console.log(w, h, s);
-				let game_container = document.getElementById('game-container');
-				game_container.style.transform = `scale(${s})`;
+			let window_width = window.innerWidth;
+			let window_height = window.innerHeight;
+			let game_width = 144;
+			let game_height = 256;
+			let scale = 2;
+			if (window_width > 480) {
+				while (game_width * scale < window_width && game_height * scale < window_height) scale++;
+				scale -= 1;
 			}
 			else {
-				s = Math.min(w/gw,h/gh);
-				let game_container = document.getElementById('game-container');
-				game_container.style.transform = `scale(${s})`;
+				scale = Math.min(window_width/game_width,window_height/game_height);
 			}
+			let game_container = document.getElementById('game-container');
+			game_container.style.transform = `scale(${scale})`;
+			game_container.style.top = `${window_height/2 - 128}px`;
 		}
 		window.onresize = resize;
 		resize();

@@ -1,5 +1,7 @@
 package states;
 
+import ui.MuteBtn;
+import ui.LeveledUp;
 import ui.Transition;
 import zero.utilities.Tween;
 import zero.flixel.ui.BitmapText;
@@ -14,7 +16,7 @@ import flixel.FlxSprite;
 import zero.utilities.Timer;
 import objects.Platform;
 import objects.Player;
-import zero.flixel.states.State;
+
 
 class PlayState extends State
 {
@@ -35,6 +37,7 @@ class PlayState extends State
 
 	var score_text:BitmapText;
 	var score(default, set) = 0;
+	var next_level:Int = 100;
 
 	override function create() {
 		bgColor = 0xFFdbf0f7;
@@ -58,6 +61,8 @@ class PlayState extends State
 		}));
 		score_text.color = 0xFFEE0000;
 		score_text.text = '0';
+		
+		add(new MuteBtn());
 		new Transition(this, IN);
 	}
 
@@ -73,10 +78,15 @@ class PlayState extends State
 		switch p.type {
 			case NORMAL:
 				o.jump();
+				Sounds.play(Audio.jump__mp3, 0.222);
 			case GROUND:
-				if (o.state == NORMAL) o.jump(GROUND_MULTIPLIER);
+				if (o.state == NORMAL) {
+					o.jump(GROUND_MULTIPLIER);
+					Sounds.play(Audio.jump__mp3, 0.222);
+				}
 			case CLOUD:
 				if (p.available) {
+					Sounds.play(Audio.charge__mp3, 0.321);
 					p.animation.play('play');
 					p.available = false;
 					p.acceleration.y = -CLOUD_DEPRESS_SPEED * 2;
@@ -84,6 +94,7 @@ class PlayState extends State
 					puffs.fire({ position: p.getMidpoint(), velocity: FlxPoint.get(-100, 0) });
 					puffs.fire({ position: p.getMidpoint(), velocity: FlxPoint.get(100, 0) });
 					Timer.get(0.5, () -> {
+						Sounds.play(Audio.bigjump__mp3, 0.321);
 						o.jump(CLOUD_MULTIPLIER);
 						for (i in 0...8) {
 							puffs.fire({
@@ -96,12 +107,16 @@ class PlayState extends State
 					});
 				}
 			case HAZARD:
-				o.state = DEAD;
-				o.electric = true;
+				if (o.state != DEAD) {
+					Sounds.play(Audio.elec__mp3, 0.5);
+					o.state = DEAD;
+					o.electric = true;
+				}
 		}
 	}
 
 	function get_powerup(powerup:Cube, player:Player) {
+		Sounds.play(Audio.posi__mp3, 0.5);
 		player.powerup_timer = POWERUP_TIME;
 		for (i in 0...6) {
 			var v = Vec2.get(150, 0);
@@ -118,6 +133,10 @@ class PlayState extends State
 	function set_score(v:Int) {
 		if (v <= score) return score;
 		score_text.text = '$v';
+		if (v >= next_level) {
+			next_level += 100;
+			new LeveledUp();
+		}
 		return score = v;
 	}
 

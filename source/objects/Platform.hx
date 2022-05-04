@@ -54,10 +54,6 @@ class HazardPlatform extends Platform {
 		super();
 		type = HAZARD;
 		loadGraphic(Images.shocker_plain__png);
-		trace(Images.shocker_plain__png);
-		//animation.add('play', [0,1], 15);
-		//animation.play('play');
-		//this.make_and_center_hitbox(26, 5);
 	}
 	var elec_timer:Float = 0;
 	override function update(elapsed:Float) {

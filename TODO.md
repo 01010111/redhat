@@ -18,17 +18,29 @@ Today
 - [x] full screen on mobile
 
 Early next week
-- [ ] Sound effects
-- [ ] Music
-- [ ] Saving data
-  - [ ] Hi score
-  - [ ] player/outfit
-  - [ ] has played
-  - [ ] initials
+- [x] Instead of "Select your Player" can it say "Select your Role" 
+- [x] Instead of showing the 3 head images of people, can we list the 3 roles? 
+- [x] Add “Level Up your Red Hat Openshift” button at end of game to link to web page
+- [x] Add “You’ve leveled up” blurb & sound(?) when you reach each 100 increment in score
+- [x] Music
 - [x] skip instructions after first play
-
-Later
-- [ ] Support big numbers (eg 1500k instead of 1500000)
-- [ ] Replace leaderboard placeholder
-  - [ ] Leaderboard backend
-  - [ ] Initials screen
+- [x] Custom Preloader
+  - [x] Implement new graphic
+- [x] Sound effects
+  - [x] Get powerup/Menu Select
+  - [x] Jump
+  - [x] Cloudjump
+  - [x] Electricute
+  - [x] Fall
+  - [x] Level Up
+  - [x] Game Over
+- [x] Saving data
+  - [x] Hi score
+  - [x] player/outfit
+  - [x] has played
+  - [x] initials
+- [x] Replace leaderboard placeholder
+  - [x] Animate leaderboard
+  - [x] Leaderboard backend
+  - [x] Initials screen
+  - [x] Support big numbers (eg 1500k instead of 1500000)

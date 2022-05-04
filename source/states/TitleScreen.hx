@@ -1,5 +1,7 @@
 package states;
 
+import lime.media.howlerjs.Howl;
+import ui.MuteBtn;
 import flixel.system.FlxAssets;
 import flixel.text.FlxText;
 import zero.utilities.Ease;
@@ -8,7 +10,7 @@ import zero.utilities.Timer;
 import flixel.group.FlxGroup;
 import ui.Button;
 import flixel.FlxSprite;
-import zero.flixel.states.State;
+
 
 class TitleScreen extends State {
 
@@ -22,6 +24,8 @@ class TitleScreen extends State {
 
 	override function create() {
 		super.create();
+
+		util.GameState.load();
 
 		FlxG.camera.flash(0xFFe4f3f4, 0.2);
 
@@ -47,6 +51,7 @@ class TitleScreen extends State {
 		add(title_graphic);
 		add(play_button);
 		add(redhat_logo);
+		add(new MuteBtn());
 	}
 
 	function make_clouds() {
@@ -75,17 +80,29 @@ class TitleScreen extends State {
 	}
 
 	function go_to_next() {
+		if (util.GameState.music == null) {
+			util.GameState.music = new lime.media.howlerjs.Howl({
+				src: ['assets/audio/music.ogg', 'assets/audio/music.mp3'],
+				loop: true,
+				autoplay: true,
+				mute: util.GameState.muted,
+			});
+		}
 		play_button.flicker(0.25, 0.05, false, true, (_) -> play_button.kill());
 		play_button.interactive = false;
 		Tween.tween(camera.scroll, 1.5, { y: -FlxG.height*1.25 }, { ease: Ease.sineIn, on_complete: () -> {
 			FlxG.switchState(new CharSelect());
 		}});
 		Timer.get(1, () -> FlxG.camera.fade(0xFFe4f3f4, 0.5));
+		Sounds.play(Audio.posi__mp3, 0.5);
 	}
 
 	override function update(dt:Float) {
 		super.update(dt);
 		for (cloud in clouds) if (cloud.x < -cloud.width) cloud.setPosition(FlxG.width, FlxG.height * 0.66.get_random(0.33));
+		#if debug
+		if (FlxG.keys.justPressed.I) util.GameState.init();
+		#end
 	}
 	
 }

@@ -23,7 +23,6 @@ class Player extends FlxSprite {
 		if (shirt) variant += 6;
 		if (pants) variant += 12;
 		variant += player * 24;
-		trace(player, hat, shirt, pants, variant);
 		acceleration.y = 600;
 		this.make_anchored_hitbox(8, 32);
 		this.set_facing_flip_horizontal(true);
@@ -89,7 +88,10 @@ class Player extends FlxSprite {
 		t = t.min(t + sp.y + height - FlxG.height * 0.5);
 		sp.put();
 		FlxG.camera.scroll.y += (t - FlxG.camera.scroll.y) * 0.25;
-		if (y - 64 > FlxG.camera.scroll.y + FlxG.height) state = DEAD;
+		if (y - 64 > FlxG.camera.scroll.y + FlxG.height && state != DEAD) {
+			Sounds.play(Audio.fall__mp3, 0.25);
+			state = DEAD;
+		}
 	}
 
 	var i = 0;
@@ -114,7 +116,6 @@ class Player extends FlxSprite {
 		var force:Float = JUMP_FORCE * mult;
 		if (powerup_timer > 0) force *= POWERUP_MULTIPLIER;
 		velocity.y = -force;
-		trace(force);
 	}
 
 	function set_state(s:PlayerState) {
