@@ -187,4 +187,6 @@ var blacklist = [
 	'KKK',
 	'FUX',
 	'FGT',
+	'ASS',
+	'SEX',
 ];

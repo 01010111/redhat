@@ -13,4 +13,4 @@ var CLOUD_DEPRESS_SPEED = 64;
 var ELECTRICITY_TIME = 0.1;
 var POWERUP_TIME = 8;
 var GROUND_MULTIPLIER = 1.2;
-var OPENSHIFT_URL = 'https://www.redhat.com/en';
+var OPENSHIFT_URL = 'https://www.redhat.com/en/engage/level-program';
