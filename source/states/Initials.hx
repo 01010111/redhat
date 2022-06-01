@@ -141,18 +141,23 @@ class Initials extends State {
 
 	function on_submit() {
 		allow_input = false;
+
 		trace('submitting score...', { 
-			player: util.GameState.player,
+			persona: util.GameState.persona,
+			products: util.GameState.products,
 			score: util.GameState.hi,
+			time: util.GameState.hi_time,
 			id: util.GameState.id,
 			initials: initials,
 		});
 
-		var req = new Http('https://lowdb-leaderboard-demo.glitch.me/post-score');
+		var req = new Http('https://levelup-leaderboard.glitch.me/post-score');
 		req.addHeader('accept', 'application/json');
 		req.setParameter('body', {
-			player: util.GameState.player,
+			persona: util.GameState.persona,
+			products: util.GameState.products,
 			score: util.GameState.hi,
+			time: util.GameState.hi_time,
 			id: util.GameState.id,
 			initials: initials,
 		}.stringify());

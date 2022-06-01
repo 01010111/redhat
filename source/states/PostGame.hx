@@ -17,9 +17,10 @@ class PostGame extends FlxSubState {
 	var score:Int;
 	var new_hi:Bool;
 
-	public function new(score:Int) {
+	public function new(score:Int, time:Float) {
 		if (util.GameState.hi < score) {
 			util.GameState.hi = score;
+			util.GameState.hi_time = time.floor();
 			new_hi = true;
 			util.GameState.save();
 		}

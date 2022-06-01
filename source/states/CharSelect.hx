@@ -56,14 +56,14 @@ class CharSelect extends State {
 			if (b) Sounds.play(Audio.select__mp3, 0.5);
 			illustrations.animation.frameIndex = i * 8;
 			player_select.animation.frameIndex = i;
-			util.GameState.player = i;
+			util.GameState.persona = i;
 		}
 
 		p1_select.on_click = () -> select(0);
 		p2_select.on_click = () -> select(1);
 		p3_select.on_click = () -> select(2);
 		
-		select(util.GameState.player, false);
+		select(util.GameState.persona, false);
 
 		bottom_bar = new FlxSprite(0, FlxG.height - 37);
 		bottom_bar.makeGraphic(FlxG.width, 37, 0xFFaedcdd);
@@ -114,7 +114,7 @@ class CharSelect extends State {
 					if (util.GameState.hat) f += 1;
 					if (util.GameState.shirt) f += 2;
 					if (util.GameState.pants) f += 4;
-					f += util.GameState.player * 8;
+					f += util.GameState.persona * 8;
 					illustrations.animation.frameIndex = f;
 				}
 				switch i {

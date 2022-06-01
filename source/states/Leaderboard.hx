@@ -95,7 +95,7 @@ class Leaderboard extends State {
 	}
 
 	function get_entries() {
-		var req = new Http('https://lowdb-leaderboard-demo.glitch.me/scores');
+		var req = new Http('https://levelup-leaderboard.glitch.me/scores');
 		req.onError = (err) -> {
 			trace(err);
 			show_msg('UNABLE TO CONNECT TO LEADERBOARD\n\nPLEASE TRY AGAIN LATER');
@@ -106,12 +106,6 @@ class Leaderboard extends State {
 		};
 		req.request();
 		return;
-		Timer.get(2, () -> {
-			entries = [for (e in entry_data) e];
-			entries.sort((e1, e2) -> e1.score > e2.score ? -1 : 0);
-			while (entries.length > 10) entries.pop();
-			populate_board();
-		});
 	}
 
 	function populate_board() {
@@ -152,7 +146,8 @@ class Leaderboard extends State {
 
 typedef LBEntry = {
 	initials:String,
-	player:Int,
+	persona:Int,
+	products:Int,
 	score:Int,
 	id:Int,
 }
@@ -211,7 +206,7 @@ class LeaderboardBar extends flixel.group.FlxGroup {
 		place_text.text = '$place';
 		initials_text.text = data.initials;
 		score_text.text = parse_score(data.score);
-		icon.animation.frameIndex = data.player;
+		icon.animation.frameIndex = data.persona;
 		if (data.id == util.GameState.id) initials_text.flicker(5, 0.1);
 	}
 
@@ -224,16 +219,3 @@ function parse_score(score:Int):String {
 	if (score >= 100000) return '${Math.round(score/1000)}K';
 	return '$score';
 }
-
-var entry_data = [
-	{ player: 0, initials: 'ABC', id: 0, score: 999999 },
-	{ player: 2, initials: 'DEF', id: 0, score: 500000 },
-	{ player: 1, initials: 'GHI', id: 0, score: 100000 },
-	{ player: 0, initials: 'JKL', id: 0, score: 10000 },
-	{ player: 2, initials: 'MNO', id: 0, score: 5000 },
-	{ player: 1, initials: 'PQR', id: 0, score: 2500 },
-	{ player: 1, initials: 'STU', id: 0, score: 1000 },
-	{ player: 0, initials: 'VWX', id: 0, score: 500 },
-	{ player: 1, initials: 'YZA', id: 0, score: 100 },
-	{ player: 2, initials: 'BCD', id: 0, score: 50 },
-];

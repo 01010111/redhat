@@ -38,12 +38,13 @@ class PlayState extends State
 	var score_text:BitmapText;
 	var score(default, set) = 0;
 	var next_level:Int = 100;
+	var time:Float = 0;
 
 	override function create() {
 		bgColor = 0xFFdbf0f7;
 		add(new BackGround());
 		add(cube_particles);
-		add(player = new Player(FlxG.width/2, FlxG.height - 43, util.GameState.player, util.GameState.hat, util.GameState.shirt, util.GameState.pants));
+		add(player = new Player(FlxG.width/2, FlxG.height - 43, util.GameState.persona, util.GameState.hat, util.GameState.shirt, util.GameState.pants));
 		add(puffs);
 		add(platforms = new PlatformManager());
 		add(powerups);
@@ -67,6 +68,7 @@ class PlayState extends State
 	}
 
 	override function update(e:Float) {
+		if (player.state == NORMAL) time += e;
 		super.update(e);
 		FlxG.collide(platforms, player, collide_platform);
 		FlxG.overlap(powerups, player, get_powerup);
@@ -142,7 +144,7 @@ class PlayState extends State
 
 	public function game_over() {
 		score_text.alpha = 0;
-		openSubState(new PostGame(score));
+		openSubState(new PostGame(score, time));
 	}
 
 }
