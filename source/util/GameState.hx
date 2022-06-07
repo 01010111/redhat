@@ -54,7 +54,7 @@ function load() {
 function bind() {
 	if (save_data != null) return;
 	save_data = new FlxSave();
-	save_data.bind('level-up-league');
+	save_data.bind('level-up-league-rc2');
 }
 
 function init() {

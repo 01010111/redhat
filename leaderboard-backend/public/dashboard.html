@@ -1,0 +1,335 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Level Up League Dashboard</title>
+    <style>
+      :root {
+        --bg: #eefeff;
+        --text: #515972;
+        --text-alt: #5779f1;
+        --bg-element: #d0e5e7;
+        --color1: #ff5fb5;
+        --color2: #dc78ff;
+        --color3: #21a5de;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: monospace;
+        font-size: 16px;
+        color: var(--text);
+        font-weight: bold;
+        margin-bottom: 16px;
+      }
+
+      h1 {
+        color: var(--text-alt);
+        font-size: 96px;
+        font-weight: normal;
+        margin-bottom: 32px;
+      }
+
+      h2 {
+        font-size: 24px;
+        margin-bottom: 32px;
+      }
+
+      body {
+        background-color: var(--bg);
+      }
+
+      .bg-element {
+        background-color: var(--bg-element);
+      }
+
+      .content {
+        display: flex;
+        flex-direction: column;
+        max-width: min(960px, calc(100vw - 64px));
+        margin: 128px auto;
+      }
+
+      section {
+        margin: 32px 0;
+      }
+
+      .header {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+      }
+
+      .header div {
+        margin-right: 32px;
+      }
+
+      .header h1 {
+        margin-bottom: -24px;
+      }
+
+      .percentage-bar {
+        background-color: var(--bg-element);
+        width: 100%;
+        height: 12px;
+        display: flex;
+        flex-direction: row;
+      }
+
+      .percentage-bar * {
+        margin-left: 4px;
+        margin-bottom: 0;
+      }
+
+      .percentage-bar div:first-child {
+        margin-left: 0 !important;
+      }
+
+      .col1 {
+        background-color: var(--color1);
+      }
+
+      .col2 {
+        background-color: var(--color2);
+      }
+
+      .col3 {
+        background-color: var(--color3);
+      }
+
+      .bar-labels {
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .bar-list {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .bar-list-item {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0px;
+        align-items: flex-end;
+      }
+
+      .bar-list-label {
+        width: 356px;
+      }
+
+      .bar-list-bar {
+        background-color: var(--bg-element);
+        width: calc(100% - 420px);
+        height: 12px;
+      }
+
+      .bar-list-bar * {
+        margin-bottom: 0;
+        height: 12px;
+      }
+
+      .bar-list-percent {
+        width: 64px;
+        text-align: right;
+      }
+
+      table {
+        width: 100%;
+      }
+
+      th {
+        padding-bottom: 16px;
+      }
+
+      td {
+        text-align: center;
+        color: var(--text-alt);
+      }
+
+      .initials {
+        font-size: 24px;
+      }
+
+      svg {
+        fill: var(--text-alt);
+        margin-bottom: 0;
+      }
+
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="content hidden" id="content">
+      <section class="header">
+        <div><h1 id="player-count"></h1></div>
+        <div>Unique<br />Players</div>
+      </section>
+      <section>
+        <h2>Personas</h2>
+        <div class="percentage-bar">
+          <div id="persona0-bar" class="col1"></div>
+          <div id="persona1-bar" class="col2"></div>
+          <div id="persona2-bar" class="col3"></div>
+        </div>
+        <div class="bar-labels">
+          <div>System Administrator - <span id="persona0-text"></span></div>
+          <div>Application Developer - <span id="persona1-text"></span></div>
+          <div>Architect - <span id="persona2-text"></span></div>
+        </div>
+      </section>
+      <section>
+        <h2>Products</h2>
+        <div class="bar-list">
+          <div class="bar-list-item">
+            <div class="bar-list-label">Red Hat Enterprise Linux</div>
+            <div class="bar-list-bar">
+              <div id="product0-bar" class="col1"></div>
+            </div>
+            <div class="bar-list-percent"><span id="product0-text"></span></div>
+          </div>
+          <div class="bar-list-item">
+            <div class="bar-list-label">Red Hat OpenShift Platform</div>
+            <div class="bar-list-bar">
+              <div id="product1-bar" class="col2"></div>
+            </div>
+            <div class="bar-list-percent"><span id="product1-text"></span></div>
+          </div>
+          <div class="bar-list-item">
+            <div class="bar-list-label">
+              Red Hat Ansible Automation Platform
+            </div>
+            <div class="bar-list-bar">
+              <div id="product2-bar" class="col3"></div>
+            </div>
+            <div class="bar-list-percent"><span id="product2-text"></span></div>
+          </div>
+        </div>
+      </section>
+      <section>
+        <h2>Leaderboard</h2>
+        <table id="leaderboard">
+          <tr>
+            <th>Initials</th>
+            <th>Score</th>
+            <th>Persona</th>
+            <th>Linux</th>
+            <th>OpenShift</th>
+            <th>Ansible</th>
+          </tr>
+        </table>
+      </section>
+    </div>
+    <script>
+      function get_data() {
+        fetch("https://levelup-leaderboard.glitch.me/all-scores")
+          .then((res) => res.json())
+          .then((json) => parse_data(json));
+      }
+      function parse_data(data) {
+        let scores = [];
+        let count = 0;
+        let personas = [0, 0, 0];
+        let products = [0, 0, 0];
+        for (let entry of data) {
+          if (entry.time < 0) continue;
+          count++;
+          scores.push(entry);
+          personas[entry.persona]++;
+          if (entry.products & 1) products[0]++;
+          if (entry.products & 2) products[1]++;
+          if (entry.products & 4) products[2]++;
+        }
+        write_data({
+          scores: scores,
+          count: count,
+          personas: personas,
+          products: products,
+        });
+      }
+      function get_id(id) {
+        return document.getElementById(id);
+      }
+      function write_data(data) {
+        get_id("player-count").innerText = data.count;
+        get_id("persona0-bar").style.width = `${Math.floor(
+          (data.personas[0] / data.count) * 100
+        )}%`;
+        get_id("persona1-bar").style.width = `${Math.floor(
+          (data.personas[1] / data.count) * 100
+        )}%`;
+        get_id("persona2-bar").style.width = `${Math.floor(
+          (data.personas[2] / data.count) * 100
+        )}%`;
+        get_id("persona0-text").innerText = `${Math.floor(
+          (data.personas[0] / data.count) * 100
+        )}%`;
+        get_id("persona1-text").innerText = `${Math.floor(
+          (data.personas[1] / data.count) * 100
+        )}%`;
+        get_id("persona2-text").innerText = `${Math.floor(
+          (data.personas[2] / data.count) * 100
+        )}%`;
+        get_id("product0-bar").style.width = `${Math.floor(
+          (data.products[0] / data.count) * 100
+        )}%`;
+        get_id("product1-bar").style.width = `${Math.floor(
+          (data.products[1] / data.count) * 100
+        )}%`;
+        get_id("product2-bar").style.width = `${Math.floor(
+          (data.products[2] / data.count) * 100
+        )}%`;
+        get_id("product0-text").innerText = `${Math.floor(
+          (data.products[0] / data.count) * 100
+        )}%`;
+        get_id("product1-text").innerText = `${Math.floor(
+          (data.products[1] / data.count) * 100
+        )}%`;
+        get_id("product2-text").innerText = `${Math.floor(
+          (data.products[2] / data.count) * 100
+        )}%`;
+        let leaderboard = get_id("leaderboard");
+        let check_true =
+          '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="0" y="0" width="16" height="16" rx="2" /></svg>';
+        let check_false =
+          '<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M2 0C0.895431 0 0 0.895431 0 2V14C0 15.1046 0.895431 16 2 16H14C15.1046 16 16 15.1046 16 14V2C16 0.895431 15.1046 0 14 0H2ZM4 3C3.44772 3 3 3.44772 3 4V12C3 12.5523 3.44772 13 4 13H12C12.5523 13 13 12.5523 13 12V4C13 3.44772 12.5523 3 12 3H4Z" /></svg>';
+        for (let entry of data.scores) {
+          let tr = document.createElement("tr");
+          let td_initials = document.createElement("td");
+          let td_score = document.createElement("td");
+          let td_persona = document.createElement("td");
+          let td_product0 = document.createElement("td");
+          let td_product1 = document.createElement("td");
+          let td_product2 = document.createElement("td");
+          td_initials.classList.add("initials");
+          td_initials.innerText = entry.initials;
+          td_score.innerText = entry.score;
+          td_persona.innerText = [
+            "System Administrator",
+            "Application Developer",
+            "Architect",
+          ][entry.persona];
+          td_product0.innerHTML = entry.products & 1 ? check_true : check_false;
+          td_product1.innerHTML = entry.products & 2 ? check_true : check_false;
+          td_product2.innerHTML = entry.products & 4 ? check_true : check_false;
+          tr.append(
+            td_initials,
+            td_score,
+            td_persona,
+            td_product0,
+            td_product1,
+            td_product2
+          );
+          leaderboard.append(tr);
+        }
+        get_id("content").classList.remove("hidden");
+      }
+      get_data();
+    </script>
+  </body>
+</html>
