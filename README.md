@@ -14,6 +14,7 @@ After installing haxe, use haxelib to install dependencies using haxelib in a te
 haxelib install lime
 haxelib install openfl
 haxelib install flixel
+haxelib git zerolib https://github.com/01010111/zerolib
 haxelib git zerolib-flixel https://github.com/01010111/zerolib-flixel
 haxelib run lime setup flixel
 haxelib run lime setup
