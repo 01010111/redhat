@@ -47,5 +47,6 @@
 
 	<template path="assets/index.html" rename="index.html" />
 	<template path="assets/app.html" rename="app.html" />
+	<template path="assets/bg.png" rename="bg.png" />
 
 </project>
