@@ -30,19 +30,28 @@ class Leaderboard extends State {
 		add(bg);
 
 		for (i in 0...10) {
-			var bar = new LeaderboardBar(16, 24 + i * 16);
+			var bar = new LeaderboardBar(16, 16 + i * 16);
 			lb_bars.push(bar);
 			add(bar);
 		}
 		
-		var menu_btn = new ui.Button(FlxG.width/2 - 48, FlxG.height - 32);
+		var menu_btn = new ui.Button(FlxG.width/2 - 48, FlxG.height - 62);
 		menu_btn.loadGraphic(Images.postgame_buttons__png, true, 96, 17);
 		menu_btn.animation.frameIndex = 4;
 		menu_btn.animation.add('play', [4,5,4,5,4], 15, false);
 		menu_btn.on_hover = () -> menu_btn.animation.play('play');
 		add(menu_btn);
+
+		var lvl_up_btn = new ui.Button(FlxG.width/2 - 48, FlxG.height - 44);
+		lvl_up_btn.loadGraphic(Images.level_up_openshift__png, true, 96, 37);
+		lvl_up_btn.animation.frameIndex = 0;
+		lvl_up_btn.animation.add('play', [0,1,0,1,0], 15, false);
+		lvl_up_btn.on_hover = () -> lvl_up_btn.animation.play('play');
+		add(lvl_up_btn);
+
+		var offset = 24;
 		
-		var myscore_bg = new FlxSprite(16, 200);
+		var myscore_bg = new FlxSprite(16, 200 - offset);
 		myscore_bg.makeGraphic(79, 15, 0xFFEE0000);
 		add(myscore_bg);
 
@@ -50,7 +59,7 @@ class Leaderboard extends State {
 			graphic: Images.alphabet__png,
 			letter_size: FlxPoint.get(8, 8),
 			charset: ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
-			position: FlxPoint.get(20, 204),
+			position: FlxPoint.get(20, 204 - offset),
 			width: 71,
 			align: LEFT,
 		});
@@ -61,14 +70,14 @@ class Leaderboard extends State {
 			graphic: Images.alphabet__png,
 			letter_size: FlxPoint.get(8, 8),
 			charset: ' ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',
-			position: FlxPoint.get(20, 204),
+			position: FlxPoint.get(20, 204 - offset),
 			width: 71,
 			align: RIGHT,
 		});
 		myscore_score.text = parse_score(util.GameState.hi);
 		add(myscore_score);
 		
-		var post_btn = new Button(96, 200);
+		var post_btn = new Button(96, 200 - offset);
 		post_btn.loadGraphic(Images.post_btn__png, true, 32, 15);
 		post_btn.animation.add('play', [0,1,0,1,0], 15, false);
 		post_btn.on_hover = () -> post_btn.animation.play('play');
@@ -85,6 +94,10 @@ class Leaderboard extends State {
 			post_btn.interactive = false;
 			menu_btn.interactive = false;
 			new TransHori(this, OUT, () -> FlxG.switchState(new Initials()));
+		}
+		lvl_up_btn.on_click = () -> {
+			Sounds.play(Audio.posi__mp3, 0.5);
+			FlxG.openURL(OPENSHIFT_URL);
 		}
 		
 		add(new MuteBtn());
