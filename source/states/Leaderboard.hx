@@ -37,8 +37,8 @@ class Leaderboard extends State {
 		
 		var menu_btn = new ui.Button(FlxG.width/2 - 48, FlxG.height - 62);
 		menu_btn.loadGraphic(Images.postgame_buttons__png, true, 96, 17);
-		menu_btn.animation.frameIndex = 4;
-		menu_btn.animation.add('play', [4,5,4,5,4], 15, false);
+		menu_btn.animation.frameIndex = 0;
+		menu_btn.animation.add('play', [0,1,0,1,0], 15, false);
 		menu_btn.on_hover = () -> menu_btn.animation.play('play');
 		add(menu_btn);
 
@@ -85,9 +85,9 @@ class Leaderboard extends State {
 
 		menu_btn.on_click = () -> {
 			Sounds.play(Audio.posi__mp3, 0.5);
+			new Transition(this, OUT, () -> Timer.get(0.25, () -> FlxG.switchState(new PlayState())));
 			menu_btn.interactive = false;
 			post_btn.interactive = false;
-			FlxG.camera.fade(0xFFe4f3f4, 0.2, false, () -> FlxG.switchState(new TitleScreen()));
 		}
 		post_btn.on_click = () -> {
 			Sounds.play(Audio.posi__mp3, 0.5);
